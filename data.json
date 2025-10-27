@@ -1,0 +1,64 @@
+{
+  "services": [
+    {
+      "id": 1,
+      "name": "美国",
+      "type": "country",
+      "price": 1.20,
+      "stock": 50,
+      "active": true,
+      "flag": "https://flagcdn.com/w80/us.png"
+    },
+    {
+      "id": 2,
+      "name": "英国", 
+      "type": "country",
+      "price": 1.50,
+      "stock": 30,
+      "active": true,
+      "flag": "https://flagcdn.com/w80/gb.png"
+    },
+    {
+      "id": 3,
+      "name": "WhatsApp",
+      "type": "app", 
+      "price": 1.50,
+      "stock": 100,
+      "active": true,
+      "icon": "fab fa-whatsapp"
+    },
+    {
+      "id": 4,
+      "name": "Telegram",
+      "type": "app",
+      "price": 1.20, 
+      "stock": 80,
+      "active": true,
+      "icon": "fab fa-telegram"
+    }
+  ],
+  "paymentMethods": [
+    {
+      "name": "TRC20 USDT",
+      "address": "TYmwTpQemLPRcXv9L3gJcNYqSURP3b99k9",
+      "active": true
+    },
+    {
+      "name": "ERC20 USDT", 
+      "address": "0x742EfB6e8B6c6b7c6c7D8e9f0a1b2c3d4e5f6a7b8",
+      "active": true
+    },
+    {
+      "name": "ERC20 USDC",
+      "address": "0x8c7E3e8d7f9C2a3b4c5d6e7f8g9h0i1j2k3l4m5n6o7p",
+      "active": true
+    }
+  ],
+  "users": [
+    {
+      "email": "user@example.com",
+      "balance": 50.00,
+      "createdAt": "2024-01-01"
+    }
+  ]
+}
