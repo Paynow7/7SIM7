@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理员登录 - 7SIM</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        :root { --primary: #4361ee; --secondary: #3f37c9; --danger: #e74c3c; }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 50px 40px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .admin-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .admin-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: white;
+            font-size: 2rem;
+        }
+
+        .form-group { margin-bottom: 25px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; }
+        .form-control { width: 100%; padding: 15px; border: 2px solid #e9ecef; border-radius: 8px; font-size: 1rem; }
+        .form-control:focus { outline: none; border-color: var(--primary); }
+        
+        .btn {
+            width: 100%; padding: 15px; border: none; border-radius: 8px;
+            font-size: 1rem; font-weight: 600; cursor: pointer;
+            background: var(--primary); color: white;
+        }
+        .btn:hover { background: var(--secondary); }
+
+        .alert {
+            padding: 12px 15px; border-radius: 8px; margin-bottom: 20px;
+            background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb;
+            display: none;
+        }
+
+        .login-footer {
+            text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e9ecef;
+        }
+        .login-footer a { color: var(--primary); text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="admin-header">
+            <div class="admin-icon"><i class="fas fa-lock"></i></div>
+            <h1>管理员登录</h1>
+            <p>7SIM 后台管理系统</p>
+        </div>
+
+        <div id="errorMessage" class="alert"></div>
+
+        <form id="adminLoginForm">
+            <div class="form-group">
+                <label>管理员账号</label>
+                <input type="text" id="adminUsername" class="form-control" placeholder="输入管理员账号" required>
+            </div>
+            
+            <div class="form-group">
+                <label>管理员密码</label>
+                <input type="password" id="adminPassword" class="form-control" placeholder="输入管理员密码" required>
+            </div>
+
+            <button type="submit" class="btn">
+                <i class="fas fa-sign-in-alt"></i> 登录
+            </button>
+        </form>
+
+        <div class="login-footer">
+            <a href="index.html"><i class="fas fa-arrow-left"></i> 返回用户首页</a>
+        </div>
+    </div>
+
+    <script>
+        // 多管理员账号配置
+        const ADMIN_ACCOUNTS = {
+            "superadmin": "superadmin123",  // 超级管理员
+            "admin1": "admin123456",        // 管理员1
+            "admin2": "admin654321"         // 管理员2
+            // 添加更多管理员： "账号": "密码"
+        };
+
+        document.getElementById('adminLoginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('adminUsername').value;
+            const password = document.getElementById('adminPassword').value;
+            const errorMessage = document.getElementById('errorMessage');
+
+            if (ADMIN_ACCOUNTS[username] && ADMIN_ACCOUNTS[username] === password) {
+                // 登录成功
+                sessionStorage.setItem('adminLoggedIn', 'true');
+                sessionStorage.setItem('adminUsername', username);
+                sessionStorage.setItem('adminLoginTime', new Date().getTime());
+                window.location.href = 'admin.html';
+            } else {
+                errorMessage.textContent = '账号或密码错误';
+                errorMessage.style.display = 'block';
+            }
+        });
+
+        // 检查登录状态
+        if (sessionStorage.getItem('adminLoggedIn') === 'true') {
+            window.location.href = 'admin.html';
+        }
+    </script>
+</body>
+</html>
