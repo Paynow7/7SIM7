@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>7SIM - 专业接码服务平台</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4bb543;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+        }
+
+        body {
+            background-color: #f5f7fb;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* 导航栏样式 */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .logo i {
+            margin-right: 8px;
+            font-size: 1.8rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 25px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .auth-buttons {
+            display: flex;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 8px 20px;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            font-size: 0.9rem;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            margin-right: 10px;
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--secondary);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--light-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            margin-left: 15px;
+            color: var(--gray);
+        }
+
+        /* 英雄区域样式 */
+        .hero {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            opacity: 0.9;
+        }
+
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .hero .btn {
+            padding: 12px 30px;
+            font-size: 1rem;
+        }
+
+        .btn-light {
+            background: white;
+            color: var(--primary);
+        }
+
+        .btn-light:hover {
+            background: var(--light-gray);
+        }
+
+        /* 服务区域样式 */
+        .services {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title h2 {
+            font-size: 2.2rem;
+            color: var(--dark);
+            margin-bottom: 15px;
+        }
+
+        .section-title p {
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .service-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .tab-btn {
+            padding: 12px 25px;
+            background: none;
+            border: none;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            color: var(--gray);
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .countries-grid, .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .country-card, .app-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+        }
+
+        .country-card:hover, .app-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .flag {
+            width: 60px;
+            height: 40px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .app-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            background: var(--light-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .country-name, .app-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .country-price, .app-price {
+            color: var(--success);
+            font-weight: 500;
+        }
+
+        /* 特性区域样式 */
+        .features {
+            padding: 80px 0;
+            background: white;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            padding: 30px;
+            border-radius: 8px;
+            background: var(--light);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: white;
+            font-size: 1.8rem;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        /* 注册/登录模态框 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 450px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            font-size: 1.5rem;
+            color: var(--dark);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--light-gray);
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .form-footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        /* 页脚样式 */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 60px 0 30px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h3 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--primary);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #343a40;
+            color: #adb5bd;
+            font-size: 0.9rem;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                padding: 15px 0;
+            }
+
+            .nav-links {
+                margin: 20px 0;
+            }
+
+            .auth-buttons {
+                margin-top: 10px;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .service-tabs {
+                flex-wrap: wrap;
+            }
+
+            .tab-btn {
+                padding: 10px 15px;
+            }
+        }
+        .verification-status {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.verification-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.verification-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.countdown {
+    color: var(--primary);
+    font-weight: 500;
+}
+
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <header>
+        <div class="container">
+            <div class="navbar">
+                <div class="logo">
+                    <i class="fas fa-sim-card"></i>
+                    <span>7SIM</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#services">服务</a></li>
+                    <li><a href="#features">特性</a></li>
+                    <li><a href="#pricing">价格</a></li>
+                    <li><a href="#faq">常见问题</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    <button class="btn btn-outline" id="loginBtn">登录</button>
+                    <button class="btn btn-primary" id="registerBtn">注册</button>
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 英雄区域 -->
+    <section class="hero">
+        <div class="container">
+            <h1>全球接码服务，安全便捷</h1>
+            <p>7SIM提供全球手机号码接收短信验证码服务，支持数千种应用和网站，保护您的隐私安全。</p>
+            <div class="hero-buttons">
+                <button class="btn btn-light">立即体验</button>
+                <button class="btn btn-outline">了解更多</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 服务区域 -->
+    <section class="services" id="services">
+        <div class="container">
+            <div class="section-title">
+                <h2>我们的服务</h2>
+                <p>选择您需要的国家或应用，获取临时手机号码接收短信验证码</p>
+            </div>
+            <div class="service-tabs">
+                <button class="tab-btn active" data-tab="countries">按国家</button>
+                <button class="tab-btn" data-tab="apps">按应用</button>
+            </div>
+            <div class="tab-content active" id="countries-tab">
+                <div class="countries-grid">
+                    <!-- 国家列表 -->
+                    <div class="country-card">
+                        <img src="https://flagcdn.com/w80/us.png" alt="美国" class="flag">
+                        <div class="country-name">美国</div>
+                        <div class="country-price">¥1.20/条</div>
+                    </div>
+                    <div class="country-card">
+                        <img src="https://flagcdn.com/w80/gb.png" alt="英国" class="flag">
+                        <div class="country-name">英国</div>
+                        <div class="country-price">¥1.50/条</div>
+                    </div>
+                    <div class="country-card">
+                        <img src="https://flagcdn.com/w80/cn.png" alt="中国" class="flag">
+                        <div class="country-name">中国</div>
+                        <div class="country-price">¥0.80/条</div>
+                    </div>
+                    <div class="country-card">
+                        <img src="https://flagcdn.com/w80/ru.png" alt="俄罗斯" class="flag">
+                        <div class="country-name">俄罗斯</div>
+                        <div class="country-price">¥1.00/条</div>
+                    </div>
+                    <div class="country-card">
+                        <img src="https://flagcdn.com/w80/jp.png" alt="日本" class="flag">
+                        <div class="country-name">日本</div>
+                        <div class="country-price">¥1.30/条</div>
+                    </div>
+                    <div class="country-card">
+                        <img src="https://flagcdn.com/w80/de.png" alt="德国" class="flag">
+                        <div class="country-name">德国</div>
+                        <div class="country-price">¥1.40/条</div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-content" id="apps-tab">
+                <div class="apps-grid">
+                    <!-- 应用列表 -->
+                    <div class="app-card">
+                        <div class="app-icon">
+                            <i class="fab fa-whatsapp"></i>
+                        </div>
+                        <div class="app-name">WhatsApp</div>
+                        <div class="app-price">¥1.50/条</div>
+                    </div>
+                    <div class="app-card">
+                        <div class="app-icon">
+                            <i class="fab fa-telegram"></i>
+                        </div>
+                        <div class="app-name">Telegram</div>
+                        <div class="app-price">¥1.20/条</div>
+                    </div>
+                    <div class="app-card">
+                        <div class="app-icon">
+                            <i class="fab fa-google"></i>
+                        </div>
+                        <div class="app-name">Google</div>
+                        <div class="app-price">¥1.80/条</div>
+                    </div>
+                    <div class="app-card">
+                        <div class="app-icon">
+                            <i class="fab fa-facebook"></i>
+                        </div>
+                        <div class="app-name">Facebook</div>
+                        <div class="app-price">¥2.00/条</div>
+                    </div>
+                    <div class="app-card">
+                        <div class="app-icon">
+                            <i class="fab fa-twitter"></i>
+                        </div>
+                        <div class="app-name">Twitter</div>
+                        <div class="app-price">¥1.60/条</div>
+                    </div>
+                    <div class="app-card">
+                        <div class="app-icon">
+                            <i class="fab fa-instagram"></i>
+                        </div>
+                        <div class="app-name">Instagram</div>
+                        <div class="app-price">¥1.70/条</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 特性区域 -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>为什么选择7SIM</h2>
+                <p>我们提供最安全可靠的接码服务，保护您的隐私</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>安全可靠</h3>
+                    <p>所有短信内容加密传输，确保您的隐私安全</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h3>全球覆盖</h3>
+                    <p>支持100+国家/地区的手机号码，满足您的各种需求</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>快速稳定</h3>
+                    <p>秒级接收短信，99.9%的服务可用性保证</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <h3>价格实惠</h3>
+                    <p>多种套餐选择，满足不同用户的需求</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <h3>专业支持</h3>
+                    <p>7x24小时在线客服，随时解决您的问题</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>多平台支持</h3>
+                    <p>支持Web、Android和iOS平台，随时随地使用</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 注册模态框 -->
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>注册账户</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="reg-email">电子邮箱</label>
+                    <input type="email" id="reg-email" class="form-control" placeholder="请输入您的邮箱" required>
+                </div>
+                <div class="form-group">
+                    <label for="reg-password">密码</label>
+                    <input type="password" id="reg-password" class="form-control" placeholder="请输入密码" required>
+                </div>
+                <div class="form-group">
+                    <label for="reg-confirm-password">确认密码</label>
+                    <input type="password" id="reg-confirm-password" class="form-control" placeholder="请再次输入密码" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">注册</button>
+                <div class="form-footer">
+                    <p>已有账户？ <a href="#" id="toLogin">立即登录</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 登录模态框 -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>登录账户</h2>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="login-email">电子邮箱</label>
+                    <input type="email" id="login-email" class="form-control" placeholder="请输入您的邮箱" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">密码</label>
+                    <input type="password" id="login-password" class="form-control" placeholder="请输入密码" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">登录</button>
+                <div class="form-footer">
+                    <p>还没有账户？ <a href="#" id="toRegister">立即注册</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>7SIM</h3>
+                    <p>全球领先的接码服务平台，为您提供安全可靠的短信接收服务。</p>
+                </div>
+                <div class="footer-column">
+                    <h3>快速链接</h3>
+                    <ul class="footer-links">
+                        <li><a href="#services">服务</a></li>
+                        <li><a href="#features">特性</a></li>
+                        <li><a href="#pricing">价格</a></li>
+                        <li><a href="#faq">常见问题</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>联系我们</h3>
+                    <ul class="footer-links">
+                        <li><a href="mailto:support@7sim.com">support@7sim.com</a></li>
+                        <li><a href="#">在线客服</a></li>
+                        <li><a href="#">用户反馈</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>法律条款</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">服务协议</a></li>
+                        <li><a href="#">隐私政策</a></li>
+                        <li><a href="#">使用条款</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 7SIM 接码服务平台. 保留所有权利.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 注册逻辑修改版（在前端）
+document.getElementById('registerForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const email = document.getElementById('reg-email').value;
+    const password = document.getElementById('reg-password').value;
+    const confirm = document.getElementById('reg-confirm-password').value;
+
+    if (password !== confirm) {
+        alert('两次密码不一致');
+        return;
+    }
+
+    try {
+        const res = await fetch('https://YOUR_BACKEND_DOMAIN/api/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
+
+        const data = await res.json();
+        if (res.ok) {
+            alert('✅ 注册成功，请前往邮箱点击验证链接完成登录！');
+        } else {
+            alert('❌ ' + (data.message || '注册失败'));
+        }
+    } catch (err) {
+        alert('网络错误，请稍后再试');
+    }
+});
+
+    </script>
+</body>
+</html>
