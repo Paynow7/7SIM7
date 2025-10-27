@@ -572,6 +572,47 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
 
+        // 加载服务数据
+async function loadServices() {
+  try {
+    const data = await loadAppData();
+    const servicesGrid = document.getElementById('servicesGrid');
+    servicesGrid.innerHTML = '';
+    
+    data.services.filter(service => service.active).forEach(service => {
+      const card = createServiceCard(service);
+      servicesGrid.appendChild(card);
+    });
+  } catch (error) {
+    console.error('加载服务失败:', error);
+  }
+}
+
+// 加载支付方式
+async function loadPaymentMethods() {
+  try {
+    const data = await loadAppData();
+    // 在充值模态框中显示支付方式
+    displayPaymentMethods(data.paymentMethods);
+  } catch (error) {
+    console.error('加载支付方式失败:', error);
+  }
+}
+
+// 通用数据加载函数
+async function loadAppData() {
+  try {
+    // 从GitHub Raw加载
+    const response = await fetch('https://raw.githubusercontent.com/您的用户名/您的仓库名/main/data.json');
+    return await response.json();
+  } catch (error) {
+    console.error('从GitHub加载数据失败:', error);
+    // 备用方案：从本地存储加载
+    const localData = localStorage.getItem('appData');
+    return localData ? JSON.parse(localData) : { services: [], paymentMethods: [] };
+  }
+}
+
         // 检查登录状态
         auth.onAuthStateChanged((user) => {
             if (user) {
