@@ -20,6 +20,8 @@
             --light: #f8f9fa;
             --dark: #212529;
             --success: #4bb543;
+            --error: #e74c3c;
+            --warning: #ff9500;
             --gray: #6c757d;
             --light-gray: #e9ecef;
         }
@@ -66,29 +68,24 @@
             font-size: 1.8rem;
         }
 
-        .nav-links {
-            display: flex;
-            list-style: none;
-        }
-
-        .nav-links li {
-            margin-left: 25px;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: var(--dark);
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: var(--primary);
-        }
-
         .auth-buttons {
             display: flex;
             align-items: center;
+            gap: 10px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .wallet-balance {
+            background: var(--light);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            color: var(--primary);
         }
 
         .btn {
@@ -105,7 +102,6 @@
             background: transparent;
             border: 1px solid var(--primary);
             color: var(--primary);
-            margin-right: 10px;
         }
 
         .btn-outline:hover {
@@ -122,20 +118,17 @@
             background: var(--secondary);
         }
 
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: var(--light-gray);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            margin-left: 15px;
-            color: var(--gray);
+        .btn-success {
+            background: var(--success);
+            color: white;
         }
 
-        /* 英雄区域样式 */
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        /* 英雄区域 */
         .hero {
             padding: 80px 0;
             background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
@@ -155,184 +148,7 @@
             opacity: 0.9;
         }
 
-        .hero-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-        }
-
-        .hero .btn {
-            padding: 12px 30px;
-            font-size: 1rem;
-        }
-
-        .btn-light {
-            background: white;
-            color: var(--primary);
-        }
-
-        .btn-light:hover {
-            background: var(--light-gray);
-        }
-
-        /* 服务区域样式 */
-        .services {
-            padding: 80px 0;
-        }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: 50px;
-        }
-
-        .section-title h2 {
-            font-size: 2.2rem;
-            color: var(--dark);
-            margin-bottom: 15px;
-        }
-
-        .section-title p {
-            color: var(--gray);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .service-tabs {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 40px;
-            border-bottom: 1px solid var(--light-gray);
-        }
-
-        .tab-btn {
-            padding: 12px 25px;
-            background: none;
-            border: none;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
-            color: var(--gray);
-            position: relative;
-            transition: color 0.3s;
-        }
-
-        .tab-btn.active {
-            color: var(--primary);
-        }
-
-        .tab-btn.active::after {
-            content: '';
-            position: absolute;
-            bottom: -1px;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: var(--primary);
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        .countries-grid, .apps-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 20px;
-        }
-
-        .country-card, .app-card {
-            background: white;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
-            transition: transform 0.3s, box-shadow 0.3s;
-            text-align: center;
-        }
-
-        .country-card:hover, .app-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .flag {
-            width: 60px;
-            height: 40px;
-            object-fit: cover;
-            border-radius: 4px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .app-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 12px;
-            margin-bottom: 15px;
-            background: var(--light-gray);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            color: var(--primary);
-        }
-
-        .country-name, .app-name {
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-
-        .country-price, .app-price {
-            color: var(--success);
-            font-weight: 500;
-        }
-
-        /* 特性区域样式 */
-        .features {
-            padding: 80px 0;
-            background: white;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-
-        .feature-card {
-            padding: 30px;
-            border-radius: 8px;
-            background: var(--light);
-            text-align: center;
-            transition: transform 0.3s;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .feature-icon {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            background: var(--primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-            color: white;
-            font-size: 1.8rem;
-        }
-
-        .feature-card h3 {
-            margin-bottom: 15px;
-            font-size: 1.3rem;
-        }
-
-        /* 注册/登录模态框 */
+        /* 模态框 */
         .modal {
             display: none;
             position: fixed;
@@ -409,122 +225,64 @@
             text-decoration: none;
         }
 
-        /* 页脚样式 */
-        footer {
-            background: var(--dark);
-            color: white;
-            padding: 60px 0 30px;
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 40px;
-            margin-bottom: 40px;
-        }
-
-        .footer-column h3 {
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-            position: relative;
-            padding-bottom: 10px;
-        }
-
-        .footer-column h3::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 40px;
-            height: 2px;
-            background: var(--primary);
-        }
-
-        .footer-links {
-            list-style: none;
-        }
-
-        .footer-links li {
-            margin-bottom: 10px;
-        }
-
-        .footer-links a {
-            color: #adb5bd;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        .footer-links a:hover {
-            color: white;
-        }
-
-        .copyright {
+        .alert {
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 15px;
             text-align: center;
-            padding-top: 30px;
-            border-top: 1px solid #343a40;
-            color: #adb5bd;
-            font-size: 0.9rem;
         }
 
-        /* 响应式设计 */
-        @media (max-width: 768px) {
-            .navbar {
-                flex-direction: column;
-                padding: 15px 0;
-            }
-
-            .nav-links {
-                margin: 20px 0;
-            }
-
-            .auth-buttons {
-                margin-top: 10px;
-            }
-
-            .hero h1 {
-                font-size: 2.2rem;
-            }
-
-            .hero p {
-                font-size: 1rem;
-            }
-
-            .service-tabs {
-                flex-wrap: wrap;
-            }
-
-            .tab-btn {
-                padding: 10px 15px;
-            }
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
         }
-        .verification-status {
-    margin-top: 10px;
-    padding: 10px;
-    border-radius: 4px;
-    text-align: center;
-}
 
-.verification-success {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-}
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
 
-.verification-error {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-}
+        .alert-info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
 
-.countdown {
-    color: var(--primary);
-    font-weight: 500;
-}
+        /* 钱包充值模态框 */
+        .recharge-section {
+            background: var(--light);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
 
-.loading {
-    opacity: 0.6;
-    pointer-events: none;
-}
+        .amount-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .amount-btn {
+            padding: 10px;
+            border: 2px solid var(--light-gray);
+            border-radius: 4px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .amount-btn.selected {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: white;
+        }
+
+        .custom-amount {
+            margin: 15px 0;
+        }
     </style>
 </head>
 <body>
@@ -536,18 +294,10 @@
                     <i class="fas fa-sim-card"></i>
                     <span>7SIM</span>
                 </div>
-                <ul class="nav-links">
-                    <li><a href="#services">服务</a></li>
-                    <li><a href="#features">特性</a></li>
-                    <li><a href="#pricing">价格</a></li>
-                    <li><a href="#faq">常见问题</a></li>
-                </ul>
-                <div class="auth-buttons">
+                <div class="auth-buttons" id="authButtons">
+                    <!-- 未登录时显示 -->
                     <button class="btn btn-outline" id="loginBtn">登录</button>
                     <button class="btn btn-primary" id="registerBtn">注册</button>
-                    <div class="user-avatar">
-                        <i class="fas fa-user"></i>
-                    </div>
                 </div>
             </div>
         </div>
@@ -556,161 +306,11 @@
     <!-- 英雄区域 -->
     <section class="hero">
         <div class="container">
-            <h1>全球接码服务，安全便捷</h1>
-            <p>7SIM提供全球手机号码接收短信验证码服务，支持数千种应用和网站，保护您的隐私安全。</p>
-            <div class="hero-buttons">
-                <button class="btn btn-light">立即体验</button>
-                <button class="btn btn-outline">了解更多</button>
-            </div>
-        </div>
-    </section>
-
-    <!-- 服务区域 -->
-    <section class="services" id="services">
-        <div class="container">
-            <div class="section-title">
-                <h2>我们的服务</h2>
-                <p>选择您需要的国家或应用，获取临时手机号码接收短信验证码</p>
-            </div>
-            <div class="service-tabs">
-                <button class="tab-btn active" data-tab="countries">按国家</button>
-                <button class="tab-btn" data-tab="apps">按应用</button>
-            </div>
-            <div class="tab-content active" id="countries-tab">
-                <div class="countries-grid">
-                    <!-- 国家列表 -->
-                    <div class="country-card">
-                        <img src="https://flagcdn.com/w80/us.png" alt="美国" class="flag">
-                        <div class="country-name">美国</div>
-                        <div class="country-price">¥1.20/条</div>
-                    </div>
-                    <div class="country-card">
-                        <img src="https://flagcdn.com/w80/gb.png" alt="英国" class="flag">
-                        <div class="country-name">英国</div>
-                        <div class="country-price">¥1.50/条</div>
-                    </div>
-                    <div class="country-card">
-                        <img src="https://flagcdn.com/w80/cn.png" alt="中国" class="flag">
-                        <div class="country-name">中国</div>
-                        <div class="country-price">¥0.80/条</div>
-                    </div>
-                    <div class="country-card">
-                        <img src="https://flagcdn.com/w80/ru.png" alt="俄罗斯" class="flag">
-                        <div class="country-name">俄罗斯</div>
-                        <div class="country-price">¥1.00/条</div>
-                    </div>
-                    <div class="country-card">
-                        <img src="https://flagcdn.com/w80/jp.png" alt="日本" class="flag">
-                        <div class="country-name">日本</div>
-                        <div class="country-price">¥1.30/条</div>
-                    </div>
-                    <div class="country-card">
-                        <img src="https://flagcdn.com/w80/de.png" alt="德国" class="flag">
-                        <div class="country-name">德国</div>
-                        <div class="country-price">¥1.40/条</div>
-                    </div>
-                </div>
-            </div>
-            <div class="tab-content" id="apps-tab">
-                <div class="apps-grid">
-                    <!-- 应用列表 -->
-                    <div class="app-card">
-                        <div class="app-icon">
-                            <i class="fab fa-whatsapp"></i>
-                        </div>
-                        <div class="app-name">WhatsApp</div>
-                        <div class="app-price">¥1.50/条</div>
-                    </div>
-                    <div class="app-card">
-                        <div class="app-icon">
-                            <i class="fab fa-telegram"></i>
-                        </div>
-                        <div class="app-name">Telegram</div>
-                        <div class="app-price">¥1.20/条</div>
-                    </div>
-                    <div class="app-card">
-                        <div class="app-icon">
-                            <i class="fab fa-google"></i>
-                        </div>
-                        <div class="app-name">Google</div>
-                        <div class="app-price">¥1.80/条</div>
-                    </div>
-                    <div class="app-card">
-                        <div class="app-icon">
-                            <i class="fab fa-facebook"></i>
-                        </div>
-                        <div class="app-name">Facebook</div>
-                        <div class="app-price">¥2.00/条</div>
-                    </div>
-                    <div class="app-card">
-                        <div class="app-icon">
-                            <i class="fab fa-twitter"></i>
-                        </div>
-                        <div class="app-name">Twitter</div>
-                        <div class="app-price">¥1.60/条</div>
-                    </div>
-                    <div class="app-card">
-                        <div class="app-icon">
-                            <i class="fab fa-instagram"></i>
-                        </div>
-                        <div class="app-name">Instagram</div>
-                        <div class="app-price">¥1.70/条</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 特性区域 -->
-    <section class="features" id="features">
-        <div class="container">
-            <div class="section-title">
-                <h2>为什么选择7SIM</h2>
-                <p>我们提供最安全可靠的接码服务，保护您的隐私</p>
-            </div>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <h3>安全可靠</h3>
-                    <p>所有短信内容加密传输，确保您的隐私安全</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-globe"></i>
-                    </div>
-                    <h3>全球覆盖</h3>
-                    <p>支持100+国家/地区的手机号码，满足您的各种需求</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-bolt"></i>
-                    </div>
-                    <h3>快速稳定</h3>
-                    <p>秒级接收短信，99.9%的服务可用性保证</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-money-bill-wave"></i>
-                    </div>
-                    <h3>价格实惠</h3>
-                    <p>多种套餐选择，满足不同用户的需求</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-headset"></i>
-                    </div>
-                    <h3>专业支持</h3>
-                    <p>7x24小时在线客服，随时解决您的问题</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-mobile-alt"></i>
-                    </div>
-                    <h3>多平台支持</h3>
-                    <p>支持Web、Android和iOS平台，随时随地使用</p>
-                </div>
+            <h1>7SIM接码服务平台</h1>
+            <p>专业的短信验证码接收服务，保护您的隐私安全</p>
+            <div class="auth-buttons">
+                <button class="btn btn-primary" id="heroRegisterBtn">立即注册</button>
+                <button class="btn btn-outline" style="background: rgba(255,255,255,0.2); color: white; border-color: white;">了解更多</button>
             </div>
         </div>
     </section>
@@ -723,13 +323,14 @@
                 <button class="close-modal">&times;</button>
             </div>
             <form id="registerForm">
+                <div id="registerAlert"></div>
                 <div class="form-group">
                     <label for="reg-email">电子邮箱</label>
                     <input type="email" id="reg-email" class="form-control" placeholder="请输入您的邮箱" required>
                 </div>
                 <div class="form-group">
                     <label for="reg-password">密码</label>
-                    <input type="password" id="reg-password" class="form-control" placeholder="请输入密码" required>
+                    <input type="password" id="reg-password" class="form-control" placeholder="请输入密码（至少6位）" required>
                 </div>
                 <div class="form-group">
                     <label for="reg-confirm-password">确认密码</label>
@@ -751,6 +352,7 @@
                 <button class="close-modal">&times;</button>
             </div>
             <form id="loginForm">
+                <div id="loginAlert"></div>
                 <div class="form-group">
                     <label for="login-email">电子邮箱</label>
                     <input type="email" id="login-email" class="form-control" placeholder="请输入您的邮箱" required>
@@ -767,78 +369,317 @@
         </div>
     </div>
 
-    <!-- 页脚 -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-column">
-                    <h3>7SIM</h3>
-                    <p>全球领先的接码服务平台，为您提供安全可靠的短信接收服务。</p>
-                </div>
-                <div class="footer-column">
-                    <h3>快速链接</h3>
-                    <ul class="footer-links">
-                        <li><a href="#services">服务</a></li>
-                        <li><a href="#features">特性</a></li>
-                        <li><a href="#pricing">价格</a></li>
-                        <li><a href="#faq">常见问题</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>联系我们</h3>
-                    <ul class="footer-links">
-                        <li><a href="mailto:support@7sim.com">support@7sim.com</a></li>
-                        <li><a href="#">在线客服</a></li>
-                        <li><a href="#">用户反馈</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>法律条款</h3>
-                    <ul class="footer-links">
-                        <li><a href="#">服务协议</a></li>
-                        <li><a href="#">隐私政策</a></li>
-                        <li><a href="#">使用条款</a></li>
-                    </ul>
-                </div>
+    <!-- 充值模态框 -->
+    <div class="modal" id="rechargeModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>钱包充值</h2>
+                <button class="close-modal">&times;</button>
             </div>
-            <div class="copyright">
-                <p>&copy; 2023 7SIM 接码服务平台. 保留所有权利.</p>
+            <div id="rechargeAlert"></div>
+            
+            <div class="recharge-section">
+                <h3>选择充值金额</h3>
+                <div class="amount-buttons">
+                    <button class="amount-btn" data-amount="10">$10</button>
+                    <button class="amount-btn" data-amount="50">$50</button>
+                    <button class="amount-btn" data-amount="100">$100</button>
+                    <button class="amount-btn" data-amount="200">$200</button>
+                    <button class="amount-btn" data-amount="500">$500</button>
+                    <button class="amount-btn" data-amount="1000">$1000</button>
+                </div>
+                
+                <div class="form-group custom-amount">
+                    <label>或输入自定义金额</label>
+                    <input type="number" id="customAmount" class="form-control" placeholder="输入金额" min="1">
+                </div>
+                
+                <button class="btn btn-primary" style="width: 100%;" id="connectWalletBtn">
+                    <i class="fas fa-wallet"></i> 连接钱包并支付
+                </button>
             </div>
         </div>
-    </footer>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
 
     <script>
-        // 注册逻辑修改版（在前端）
-document.getElementById('registerForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
+        // ==================== Firebase配置 ====================
+        // 你需要从这里获取配置：Firebase控制台 → 项目设置 → 常规 → 你的应用
+        const firebaseConfig = {
+            apiKey: "你的_apiKey_这里",
+            authDomain: "你的项目.firebaseapp.com",
+            projectId: "你的项目ID",
+            appId: "你的_appId_这里"
+        };
 
-    const email = document.getElementById('reg-email').value;
-    const password = document.getElementById('reg-password').value;
-    const confirm = document.getElementById('reg-confirm-password').value;
+        // 初始化Firebase
+        firebase.initializeApp(firebaseConfig);
 
-    if (password !== confirm) {
-        alert('两次密码不一致');
-        return;
-    }
+        // ==================== 全局变量 ====================
+        let currentUser = null;
+        let selectedAmount = 0;
 
-    try {
-        const res = await fetch('https://YOUR_BACKEND_DOMAIN/api/register', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password })
+        // ==================== DOM元素 ====================
+        const authButtons = document.getElementById('authButtons');
+        const registerBtn = document.getElementById('registerBtn');
+        const loginBtn = document.getElementById('loginBtn');
+        const heroRegisterBtn = document.getElementById('heroRegisterBtn');
+        const registerModal = document.getElementById('registerModal');
+        const loginModal = document.getElementById('loginModal');
+        const rechargeModal = document.getElementById('rechargeModal');
+        const closeModalBtns = document.querySelectorAll('.close-modal');
+        const toLogin = document.getElementById('toLogin');
+        const toRegister = document.getElementById('toRegister');
+        const registerForm = document.getElementById('registerForm');
+        const loginForm = document.getElementById('loginForm');
+        const connectWalletBtn = document.getElementById('connectWalletBtn');
+        const amountButtons = document.querySelectorAll('.amount-btn');
+        const customAmountInput = document.getElementById('customAmount');
+
+        // ==================== 工具函数 ====================
+        function showAlert(containerId, message, type) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+            setTimeout(() => {
+                container.innerHTML = '';
+            }, 5000);
+        }
+
+        function updateUIForUser(user) {
+            authButtons.innerHTML = `
+                <div class="user-info">
+                    <div class="wallet-balance">
+                        <i class="fas fa-wallet"></i> 余额: $0.00
+                    </div>
+                    <button class="btn btn-warning" id="rechargeBtn">
+                        <i class="fas fa-plus"></i> 充值
+                    </button>
+                    <button class="btn btn-outline" id="logoutBtn">退出</button>
+                </div>
+            `;
+            
+            // 绑定新按钮事件
+            document.getElementById('rechargeBtn').addEventListener('click', showRechargeModal);
+            document.getElementById('logoutBtn').addEventListener('click', logout);
+            
+            // 更新用户信息
+            currentUser = user;
+        }
+
+        // ==================== 认证功能 ====================
+        async function registerWithFirebase(email, password) {
+            try {
+                const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
+                
+                // 发送验证邮件
+                await userCredential.user.sendEmailVerification();
+                
+                return {
+                    success: true,
+                    message: '注册成功！请检查您的邮箱点击验证链接。'
+                };
+            } catch (error) {
+                let message = '注册失败：';
+                switch (error.code) {
+                    case 'auth/email-already-in-use':
+                        message += '该邮箱已被注册';
+                        break;
+                    case 'auth/invalid-email':
+                        message += '邮箱格式不正确';
+                        break;
+                    case 'auth/weak-password':
+                        message += '密码太弱，至少6位';
+                        break;
+                    default:
+                        message += error.message;
+                }
+                return { success: false, message };
+            }
+        }
+
+        async function loginWithFirebase(email, password) {
+            try {
+                const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+                
+                if (!user.emailVerified) {
+                    return {
+                        success: false,
+                        message: '请先验证您的邮箱才能登录'
+                    };
+                }
+                
+                return {
+                    success: true,
+                    message: '登录成功！',
+                    user: user
+                };
+            } catch (error) {
+                let message = '登录失败：';
+                switch (error.code) {
+                    case 'auth/user-not-found':
+                        message += '用户不存在';
+                        break;
+                    case 'auth/wrong-password':
+                        message += '密码错误';
+                        break;
+                    case 'auth/invalid-email':
+                        message += '邮箱格式不正确';
+                        break;
+                    default:
+                        message += error.message;
+                }
+                return { success: false, message };
+            }
+        }
+
+        function logout() {
+            firebase.auth().signOut();
+            location.reload(); // 简单刷新页面
+        }
+
+        // ==================== 钱包功能 ====================
+        function showRechargeModal() {
+            selectedAmount = 0;
+            document.getElementById('rechargeAlert').innerHTML = '';
+            customAmountInput.value = '';
+            amountButtons.forEach(btn => btn.classList.remove('selected'));
+            rechargeModal.style.display = 'flex';
+        }
+
+        function connectWallet() {
+            // 这里会在用户点击充值确认后连接Trust Wallet
+            if (selectedAmount <= 0) {
+                showAlert('rechargeAlert', '请选择或输入充值金额', 'error');
+                return;
+            }
+            
+            showAlert('rechargeAlert', `正在连接钱包处理 $${selectedAmount} 的充值...`, 'info');
+            
+            // 模拟钱包连接 - 实际这里会调用Web3代码
+            setTimeout(() => {
+                showAlert('rechargeAlert', '请确认Trust Wallet中的交易', 'info');
+                // 实际项目中这里会调用：window.ethereum.request({ method: 'eth_requestAccounts' })
+            }, 1000);
+        }
+
+        // ==================== 事件监听 ====================
+        // 模态框控制
+        registerBtn.addEventListener('click', () => registerModal.style.display = 'flex');
+        loginBtn.addEventListener('click', () => loginModal.style.display = 'flex');
+        heroRegisterBtn.addEventListener('click', () => registerModal.style.display = 'flex');
+
+        closeModalBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                registerModal.style.display = 'none';
+                loginModal.style.display = 'none';
+                rechargeModal.style.display = 'none';
+            });
         });
 
-        const data = await res.json();
-        if (res.ok) {
-            alert('✅ 注册成功，请前往邮箱点击验证链接完成登录！');
-        } else {
-            alert('❌ ' + (data.message || '注册失败'));
-        }
-    } catch (err) {
-        alert('网络错误，请稍后再试');
-    }
-});
+        toLogin.addEventListener('click', (e) => {
+            e.preventDefault();
+            registerModal.style.display = 'none';
+            loginModal.style.display = 'flex';
+        });
 
+        toRegister.addEventListener('click', (e) => {
+            e.preventDefault();
+            loginModal.style.display = 'none';
+            registerModal.style.display = 'flex';
+        });
+
+        // 点击模态框外部关闭
+        window.addEventListener('click', (e) => {
+            if (e.target === registerModal) registerModal.style.display = 'none';
+            if (e.target === loginModal) loginModal.style.display = 'none';
+            if (e.target === rechargeModal) rechargeModal.style.display = 'none';
+        });
+
+        // 注册表单提交
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('reg-email').value;
+            const password = document.getElementById('reg-password').value;
+            const confirmPassword = document.getElementById('reg-confirm-password').value;
+
+            // 前端验证
+            if (password !== confirmPassword) {
+                showAlert('registerAlert', '密码不一致！', 'error');
+                return;
+            }
+
+            if (password.length < 6) {
+                showAlert('registerAlert', '密码至少6位！', 'error');
+                return;
+            }
+
+            const result = await registerWithFirebase(email, password);
+            
+            if (result.success) {
+                showAlert('registerAlert', result.message, 'success');
+                setTimeout(() => {
+                    registerModal.style.display = 'none';
+                    registerForm.reset();
+                }, 3000);
+            } else {
+                showAlert('registerAlert', result.message, 'error');
+            }
+        });
+
+        // 登录表单提交
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            const result = await loginWithFirebase(email, password);
+            
+            if (result.success) {
+                showAlert('loginAlert', result.message, 'success');
+                setTimeout(() => {
+                    loginModal.style.display = 'none';
+                    loginForm.reset();
+                    updateUIForUser(result.user);
+                }, 1500);
+            } else {
+                showAlert('loginAlert', result.message, 'error');
+            }
+        });
+
+        // 充值金额选择
+        amountButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                amountButtons.forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                selectedAmount = parseFloat(btn.dataset.amount);
+                customAmountInput.value = '';
+            });
+        });
+
+        // 自定义金额输入
+        customAmountInput.addEventListener('input', () => {
+            amountButtons.forEach(btn => btn.classList.remove('selected'));
+            selectedAmount = parseFloat(customAmountInput.value) || 0;
+        });
+
+        // 连接钱包按钮
+        connectWalletBtn.addEventListener('click', connectWallet);
+
+        // ==================== 初始化 ====================
+        // 检查用户是否已登录
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user && user.emailVerified) {
+                updateUIForUser(user);
+            }
+        });
+
+        console.log('7SIM平台初始化完成');
     </script>
 </body>
 </html>
