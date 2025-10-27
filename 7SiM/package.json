@@ -1,0 +1,9 @@
+{
+  "name": "7sim-project",
+  "version": "1.0.0",
+  "description": "7SIM接码服务平台 - 使用Firebase认证",
+  "type": "commonjs",
+  "scripts": {
+    "dev": "echo '开发模式'"
+  }
+}
