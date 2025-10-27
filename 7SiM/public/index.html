@@ -1141,66 +1141,7 @@
                 });
             });
 
-            // ============ 添加登录按钮功能 ============
-    const registerBtn = document.getElementById('registerBtn');
-    const loginBtn = document.getElementById('loginBtn');
-    const registerModal = document.getElementById('registerModal');
-    const loginModal = document.getElementById('loginModal');
-    const closeModalBtns = document.querySelectorAll('.close-modal');
-    const toLogin = document.getElementById('toLogin');
-    const toRegister = document.getElementById('toRegister');
-    
-    // 检查按钮是否存在
-    console.log('注册按钮:', registerBtn);
-    console.log('登录按钮:', loginBtn);
-    
-    if (registerBtn) {
-        registerBtn.addEventListener('click', () => {
-            console.log('注册按钮被点击');
-            registerModal.style.display = 'flex';
-        });
-    }
-    
-    if (loginBtn) {
-        loginBtn.addEventListener('click', () => {
-            console.log('登录按钮被点击');
-            loginModal.style.display = 'flex';
-        });
-    }
-    
-    // 关闭模态框
-    closeModalBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            registerModal.style.display = 'none';
-            loginModal.style.display = 'none';
-        });
-    });
-    
-    // 切换登录/注册
-    toLogin.addEventListener('click', (e) => {
-        e.preventDefault();
-        registerModal.style.display = 'none';
-        loginModal.style.display = 'flex';
-    });
-    
-    toRegister.addEventListener('click', (e) => {
-        e.preventDefault();
-        loginModal.style.display = 'none';
-        registerModal.style.display = 'flex';
-    });
-    
-    // 点击模态框外部关闭
-    window.addEventListener('click', (e) => {
-        if (e.target === registerModal) {
-            registerModal.style.display = 'none';
-        }
-        if (e.target === loginModal) {
-            loginModal.style.display = 'none';
-        }
-    });
-    // ============ 登录按钮功能结束 ============
-});
-            
+           
             // 模态框功能
             const registerBtn = document.getElementById('registerBtn');
             const loginBtn = document.getElementById('loginBtn');
@@ -1417,7 +1358,7 @@
                 }
             });
 
-            // 表单提交处理 - 修改注册逻辑
+                        // 表单提交处理 - 修改注册逻辑
             document.getElementById('registerForm').addEventListener('submit', function(e) {
                 e.preventDefault();
                 const email = document.getElementById('reg-email').value;
@@ -1449,29 +1390,33 @@
                     .catch((error) => {
                         // 如果登录失败，尝试创建新用户
                         if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
-                            
-                           // 在注册成功后添加
-auth.createUserWithEmailAndPassword(email, password)
-    .then((userCredential) => {
-        // 注册成功
-        const user = userCredential.user;
-        
-        // 发送邮箱验证
-        user.sendEmailVerification().then(() => {
-            alert('注册成功！邮箱验证邮件已发送到您的邮箱，请查收并验证。');
-        }).catch((error) => {
-            console.error('发送验证邮件失败:', error);
-        });
-        
-        // 创建用户文档（包含API Key）
-        createUserDocument(user.uid, email);
-        
-        hideModal(registerModal);
-    })
-    .catch((error) => {
-        console.error('注册失败:', error);
-        alert('注册失败: ' + error.message);
-    });
+                            // 使用Firebase注册新用户
+                            auth.createUserWithEmailAndPassword(email, password)
+                                .then((userCredential) => {
+                                    // 注册成功
+                                    const user = userCredential.user;
+                                    
+                                    // 发送邮箱验证
+                                    user.sendEmailVerification().then(() => {
+                                        alert('注册成功！邮箱验证邮件已发送到您的邮箱，请查收并验证。');
+                                    }).catch((error) => {
+                                        console.error('发送验证邮件失败:', error);
+                                    });
+                                    
+                                    // 创建用户文档
+                                    createUserDocument(user.uid, email);
+                                    
+                                    hideModal(registerModal);
+                                })
+                                .catch((error) => {
+                                    console.error('注册失败:', error);
+                                    alert('注册失败: ' + error.message);
+                                });
+                        } else {
+                            alert('登录失败: ' + error.message);
+                        }
+                    });
+            });
                                     
                                     // 创建用户文档
                                     createUserDocument(user.uid, email);
