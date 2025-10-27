@@ -1357,77 +1357,65 @@
                 }
             });
 
-            // 表单提交处理 - 修改注册逻辑
-            document.getElementById('registerForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                const email = document.getElementById('reg-email').value;
-                const password = document.getElementById('reg-password').value;
-                const confirmPassword = document.getElementById('reg-confirm-password').value;
-                
-                if (password !== confirmPassword) {
-                    alert('两次输入的密码不一致');
-                    return;
-                }
-                
-                // 先尝试登录，如果用户已存在就直接登录并发送验证邮件
-                auth.signInWithEmailAndPassword(email, password)
+           // 表单提交处理 - 修改注册逻辑
+document.getElementById('registerForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const email = document.getElementById('reg-email').value;
+    const password = document.getElementById('reg-password').value;
+    const confirmPassword = document.getElementById('reg-confirm-password').value;
+    
+    if (password !== confirmPassword) {
+        alert('两次输入的密码不一致');
+        return;
+    }
+    
+    // 先尝试登录，如果用户已存在就直接登录并发送验证邮件
+    auth.signInWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+            // 用户已存在，直接登录成功
+            const user = userCredential.user;
+            
+            // 发送邮箱验证
+            user.sendEmailVerification().then(() => {
+                alert('邮箱验证邮件已重新发送到您的邮箱！');
+            }).catch((error) => {
+                console.error('发送验证邮件失败:', error);
+                alert('发送验证邮件失败: ' + error.message);
+            });
+            
+            hideModal(registerModal);
+            updateUI();
+        })
+        .catch((error) => {
+            // 如果登录失败，尝试创建新用户
+            if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+                // 使用Firebase注册新用户
+                auth.createUserWithEmailAndPassword(email, password)
                     .then((userCredential) => {
-                        // 用户已存在，直接登录成功
+                        // 注册成功
                         const user = userCredential.user;
                         
                         // 发送邮箱验证
                         user.sendEmailVerification().then(() => {
-                            alert('邮箱验证邮件已重新发送到您的邮箱！');
+                            alert('注册成功！邮箱验证邮件已发送到您的邮箱，请查收并验证。');
                         }).catch((error) => {
                             console.error('发送验证邮件失败:', error);
-                            alert('发送验证邮件失败: ' + error.message);
                         });
                         
+                        // 创建用户文档
+                        createUserDocument(user.uid, email);
+                        
                         hideModal(registerModal);
-                        updateUI();
                     })
                     .catch((error) => {
-                        // 如果登录失败，尝试创建新用户
-                        if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
-                            
-                           // 在注册成功后添加
-auth.createUserWithEmailAndPassword(email, password)
-    .then((userCredential) => {
-        // 注册成功
-        const user = userCredential.user;
-        
-        // 发送邮箱验证
-        user.sendEmailVerification().then(() => {
-            alert('注册成功！邮箱验证邮件已发送到您的邮箱，请查收并验证。');
-        }).catch((error) => {
-            console.error('发送验证邮件失败:', error);
-        });
-        
-        // 创建用户文档（包含API Key）
-        createUserDocument(user.uid, email);
-        
-        hideModal(registerModal);
-    })
-    .catch((error) => {
-        console.error('注册失败:', error);
-        alert('注册失败: ' + error.message);
-    });
-                                    
-                                    // 创建用户文档
-                                    createUserDocument(user.uid, email);
-                                    
-                                    hideModal(registerModal);
-                                    updateUI();
-                                })
-                                .catch((error) => {
-                                    console.error('注册失败:', error);
-                                    alert('注册失败: ' + error.message);
-                                });
-                        } else {
-                            alert('登录失败: ' + error.message);
-                        }
+                        console.error('注册失败:', error);
+                        alert('注册失败: ' + error.message);
                     });
-            });
+            } else {
+                alert('登录失败: ' + error.message);
+            }
+        });
+});
             
             // 替换原有的登录表单提交处理
 document.getElementById('loginForm').addEventListener('submit', function(e) {
