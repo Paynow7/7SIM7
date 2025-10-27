@@ -1140,6 +1140,66 @@
                     document.getElementById(tabId).classList.add('active');
                 });
             });
+
+            // ============ 添加登录按钮功能 ============
+    const registerBtn = document.getElementById('registerBtn');
+    const loginBtn = document.getElementById('loginBtn');
+    const registerModal = document.getElementById('registerModal');
+    const loginModal = document.getElementById('loginModal');
+    const closeModalBtns = document.querySelectorAll('.close-modal');
+    const toLogin = document.getElementById('toLogin');
+    const toRegister = document.getElementById('toRegister');
+    
+    // 检查按钮是否存在
+    console.log('注册按钮:', registerBtn);
+    console.log('登录按钮:', loginBtn);
+    
+    if (registerBtn) {
+        registerBtn.addEventListener('click', () => {
+            console.log('注册按钮被点击');
+            registerModal.style.display = 'flex';
+        });
+    }
+    
+    if (loginBtn) {
+        loginBtn.addEventListener('click', () => {
+            console.log('登录按钮被点击');
+            loginModal.style.display = 'flex';
+        });
+    }
+    
+    // 关闭模态框
+    closeModalBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            registerModal.style.display = 'none';
+            loginModal.style.display = 'none';
+        });
+    });
+    
+    // 切换登录/注册
+    toLogin.addEventListener('click', (e) => {
+        e.preventDefault();
+        registerModal.style.display = 'none';
+        loginModal.style.display = 'flex';
+    });
+    
+    toRegister.addEventListener('click', (e) => {
+        e.preventDefault();
+        loginModal.style.display = 'none';
+        registerModal.style.display = 'flex';
+    });
+    
+    // 点击模态框外部关闭
+    window.addEventListener('click', (e) => {
+        if (e.target === registerModal) {
+            registerModal.style.display = 'none';
+        }
+        if (e.target === loginModal) {
+            loginModal.style.display = 'none';
+        }
+    });
+    // ============ 登录按钮功能结束 ============
+});
             
             // 模态框功能
             const registerBtn = document.getElementById('registerBtn');
