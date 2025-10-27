@@ -1389,18 +1389,29 @@
                     .catch((error) => {
                         // 如果登录失败，尝试创建新用户
                         if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
-                            // 使用Firebase注册新用户
-                            auth.createUserWithEmailAndPassword(email, password)
-                                .then((userCredential) => {
-                                    // 注册成功
-                                    const user = userCredential.user;
-                                    
-                                    // 发送邮箱验证
-                                    user.sendEmailVerification().then(() => {
-                                        alert('注册成功！邮箱验证邮件已发送到您的邮箱，请查收并验证。');
-                                    }).catch((error) => {
-                                        console.error('发送验证邮件失败:', error);
-                                    });
+                            
+                           // 在注册成功后添加
+auth.createUserWithEmailAndPassword(email, password)
+    .then((userCredential) => {
+        // 注册成功
+        const user = userCredential.user;
+        
+        // 发送邮箱验证
+        user.sendEmailVerification().then(() => {
+            alert('注册成功！邮箱验证邮件已发送到您的邮箱，请查收并验证。');
+        }).catch((error) => {
+            console.error('发送验证邮件失败:', error);
+        });
+        
+        // 创建用户文档（包含API Key）
+        createUserDocument(user.uid, email);
+        
+        hideModal(registerModal);
+    })
+    .catch((error) => {
+        console.error('注册失败:', error);
+        alert('注册失败: ' + error.message);
+    });
                                     
                                     // 创建用户文档
                                     createUserDocument(user.uid, email);
@@ -1418,43 +1429,65 @@
                     });
             });
             
-            document.getElementById('loginForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                const email = document.getElementById('login-email').value;
-                const password = document.getElementById('login-password').value;
-                
-                // 使用Firebase登录用户
-                auth.signInWithEmailAndPassword(email, password)
-                    .then((userCredential) => {
-                        // 登录成功
-                        const user = userCredential.user;
-                        
-                        // 显示验证提醒（无论是否已验证）
-                        verificationNotice.style.display = 'block';
-                        
-                        if (!user.emailVerified) {
-                            alert('您的邮箱尚未验证，请检查您的邮箱并完成验证。');
-                        } else {
-                            alert('登录成功！');
-                            verificationNotice.style.display = 'none';
-                        }
-                        
-                        hideModal(loginModal);
-                        updateUI();
-                    })
-                    .catch((error) => {
-                        console.error('登录失败:', error);
-                        
-                        // 如果是用户不存在，提示注册
-                        if (error.code === 'auth/user-not-found') {
-                            alert('该邮箱尚未注册，请先注册账户。');
-                            hideModal(loginModal);
-                            showModal(registerModal);
-                        } else {
-                            alert('登录失败: ' + error.message);
-                        }
-                    });
-            });
+            // 替换原有的登录表单提交处理
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const email = document.getElementById('login-email').value;
+    const password = document.getElementById('login-password').value;
+    
+    // 使用Firebase登录用户
+    auth.signInWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+            // 登录成功
+            const user = userCredential.user;
+            
+            if (!user.emailVerified) {
+                alert('您的邮箱尚未验证，请检查您的邮箱并完成验证。');
+                verificationNotice.style.display = 'block';
+            } else {
+                // 邮箱已验证，检查是否为管理员
+                checkUserRole(user.uid).then(isAdmin => {
+                    if (isAdmin) {
+                        // 管理员跳转到admin.html
+                        window.location.href = 'admin.html';
+                    } else {
+                        // 普通用户跳转到dashboard.html
+                        window.location.href = 'dashboard.html';
+                    }
+                });
+            }
+            
+            hideModal(loginModal);
+        })
+        .catch((error) => {
+            console.error('登录失败:', error);
+            
+            // 如果是用户不存在，提示注册
+            if (error.code === 'auth/user-not-found') {
+                alert('该邮箱尚未注册，请先注册账户。');
+                hideModal(loginModal);
+                showModal(registerModal);
+            } else {
+                alert('登录失败: ' + error.message);
+            }
+        });
+});
+
+// 添加检查用户角色的函数
+function checkUserRole(uid) {
+    return db.collection('users').doc(uid).get()
+        .then((doc) => {
+            if (doc.exists) {
+                const userData = doc.data();
+                return userData.isAdmin || false;
+            }
+            return false;
+        })
+        .catch((error) => {
+            console.error('检查用户角色失败:', error);
+            return false;
+        });
+}
             
             // 监听认证状态变化
             auth.onAuthStateChanged((user) => {
@@ -1541,37 +1574,44 @@
             }
         }
         
-        // 创建用户文档（只在第一次注册时创建）
-        function createUserDocument(uid, email) {
-            // 检查是否已存在用户文档
-            db.collection('users').doc(uid).get()
-                .then((doc) => {
-                    if (!doc.exists) {
-                        // 只有不存在时才创建新文档
-                        db.collection('users').doc(uid).set({
-                            email: email,
-                            balance: 0.00,
-                            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                            apiKey: generateRandomApiKey(),
-                            lastLogin: firebase.firestore.FieldValue.serverTimestamp()
-                        })
-                        .then(() => {
-                            console.log('用户文档创建成功');
-                        })
-                        .catch((error) => {
-                            console.error('创建用户文档失败:', error);
-                        });
-                    } else {
-                        // 更新最后登录时间
-                        db.collection('users').doc(uid).update({
-                            lastLogin: firebase.firestore.FieldValue.serverTimestamp()
-                        });
-                    }
+        // 替换原有的 createUserDocument 函数
+function createUserDocument(uid, email) {
+    // 先生成API Key
+    const apiKey = generateRandomApiKey();
+    
+    // 检查是否已存在用户文档
+    db.collection('users').doc(uid).get()
+        .then((doc) => {
+            if (!doc.exists) {
+                // 只有不存在时才创建新文档
+                db.collection('users').doc(uid).set({
+                    email: email,
+                    balance: 0.00,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    apiKey: apiKey, // 确保这里设置了apiKey
+                    lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
+                    isAdmin: false // 默认不是管理员
+                })
+                .then(() => {
+                    console.log('用户文档创建成功，API Key:', apiKey);
+                    // 显示API Key给用户
+                    alert(`注册成功！您的API Key已生成：${apiKey}\n请妥善保存！`);
                 })
                 .catch((error) => {
-                    console.error('检查用户文档失败:', error);
+                    console.error('创建用户文档失败:', error);
                 });
-        }
+            } else {
+                // 更新最后登录时间
+                db.collection('users').doc(uid).update({
+                    lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                console.log('用户已存在，更新登录时间');
+            }
+        })
+        .catch((error) => {
+            console.error('检查用户文档失败:', error);
+        });
+}
         
         // 更新余额显示
         function updateBalanceDisplay(uid) {
