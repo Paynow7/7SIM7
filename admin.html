@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理员后台 - 7SIM</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        :root { --primary: #4361ee; --secondary: #3f37c9; --success: #4bb543; --danger: #e74c3c; --sidebar: #2c3e50; }
+        
+        body { display: flex; background: #f8f9fa; }
+        
+        /* 侧边栏 */
+        .sidebar {
+            width: 250px; background: var(--sidebar); color: white; height: 100vh;
+            position: fixed; left: 0; top: 0; padding: 20px 0;
+        }
+        
+        .sidebar-header { padding: 0 20px 20px; border-bottom: 1px solid #34495e; margin-bottom: 20px; }
+        .sidebar-header h2 { font-size: 1.2rem; }
+        .sidebar-header .admin-name { color: #bdc3c7; font-size: 0.9rem; }
+        
+        .nav-item {
+            padding: 15px 20px; cursor: pointer; transition: background 0.3s;
+            border-left: 3px solid transparent;
+        }
+        .nav-item:hover { background: #34495e; }
+        .nav-item.active { background: #34495e; border-left-color: var(--primary); }
+        .nav-item i { width: 20px; margin-right: 10px; }
+        
+        /* 主内容区 */
+        .main-content {
+            margin-left: 250px; padding: 30px; width: calc(100% - 250px);
+        }
+        
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .header h1 { color: #2c3e50; }
+        
+        .btn { padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-weight: 500; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-danger { background: var(--danger); color: white; }
+        
+        /* 内容卡片 */
+        .content-card {
+            background: white; border-radius: 10px; padding: 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px; display: none;
+        }
+        .content-card.active { display: block; }
+        
+        /* 表格样式 */
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #e9ecef; }
+        th { background: #f8f9fa; font-weight: 600; }
+        
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: 500; }
+        .form-control { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
+        
+        .crypto-method { background: #f8f9fa; padding: 15px; border-radius: 5px; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <!-- 侧边栏 -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>7SIM 管理后台</h2>
+            <div class="admin-name" id="currentAdmin">管理员</div>
+        </div>
+        <div class="nav-item active" data-tab="products"><i class="fas fa-box"></i> 产品设置</div>
+        <div class="nav-item" data-tab="users"><i class="fas fa-users"></i> 用户列表</div>
+        <div class="nav-item" data-tab="wallet"><i class="fas fa-wallet"></i> 钱包设置</div>
+        <div class="nav-item" data-tab="crypto"><i class="fas fa-coins"></i> 加密货币转账</div>
+        <div class="nav-item" onclick="adminLogout()" style="margin-top: 20px; border-top: 1px solid #34495e; padding-top: 20px;">
+            <i class="fas fa-sign-out-alt"></i> 退出登录
+        </div>
+    </div>
+
+    <!-- 主内容区 -->
+    <div class="main-content">
+        <div class="header">
+            <h1 id="pageTitle">产品设置</h1>
+            <div>欢迎, <span id="adminWelcome"></span></div>
+        </div>
+
+        <!-- 产品设置 -->
+        <div class="content-card active" id="products">
+            <h3><i class="fas fa-cog"></i> 接码服务管理</h3>
+            
+            <div style="margin: 20px 0;">
+                <button class="btn btn-primary" onclick="showAddServiceModal()">
+                    <i class="fas fa-plus"></i> 添加服务
+                </button>
+            </div>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>名称</th>
+                        <th>类型</th>
+                        <th>价格 (¥)</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="servicesTable">
+                    <!-- 动态加载 -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 用户列表 -->
+        <div class="content-card" id="users">
+            <h3><i class="fas fa-users"></i> 用户管理</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>邮箱</th>
+                        <th>余额</th>
+                        <th>注册时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="usersTable">
+                    <!-- 动态加载 -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 钱包设置 -->
+        <div class="content-card" id="wallet">
+            <h3><i class="fas fa-wallet"></i> 支付方式配置</h3>
+            
+            <div class="crypto-method">
+                <h4>TRC20 USDT</h4>
+                <div class="form-group">
+                    <label>收款地址</label>
+                    <input type="text" class="form-control" id="trc20Address" placeholder="TRC20 USDT 收款地址">
+                </div>
+            </div>
+            
+            <div class="crypto-method">
+                <h4>ERC20 USDT</h4>
+                <div class="form-group">
+                    <label>收款地址</label>
+                    <input type="text" class="form-control" id="erc20usdtAddress" placeholder="ERC20 USDT 收款地址">
+                </div>
+            </div>
+            
+            <div class="crypto-method">
+                <h4>ERC20 USDC</h4>
+                <div class="form-group">
+                    <label>收款地址</label>
+                    <input type="text" class="form-control" id="erc20usdcAddress" placeholder="ERC20 USDC 收款地址">
+                </div>
+            </div>
+            
+            <button class="btn btn-primary">保存支付配置</button>
+        </div>
+
+        <!-- 加密货币转账 -->
+        <div class="content-card" id="crypto">
+            <h3><i class="fas fa-exchange-alt"></i> 加密货币转账</h3>
+            
+            <div class="form-group">
+                <label>选择用户</label>
+                <select class="form-control" id="transferUser">
+                    <option value="">选择用户...</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>转账金额 (USDT)</label>
+                <input type="number" class="form-control" id="transferAmount" placeholder="输入转账金额">
+            </div>
+            
+            <div class="form-group">
+                <label>收款地址</label>
+                <input type="text" class="form-control" id="transferToAddress" placeholder="输入收款钱包地址">
+            </div>
+            
+            <div class="form-group">
+                <label>选择网络</label>
+                <select class="form-control" id="transferNetwork">
+                    <option value="trc20">TRC20</option>
+                    <option value="erc20">ERC20</option>
+                </select>
+            </div>
+            
+            <button class="btn btn-primary" onclick="processCryptoTransfer()">
+                <i class="fas fa-paper-plane"></i> 执行转账
+            </button>
+            
+            <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 5px;">
+                <h4>转账记录</h4>
+                <div id="transferHistory">
+                    <!-- 转账记录 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 检查登录状态
+        if (sessionStorage.getItem('adminLoggedIn') !== 'true') {
+            window.location.href = 'admin-login.html';
+        }
+
+        // 显示当前管理员
+        const currentAdmin = sessionStorage.getItem('adminUsername') || '管理员';
+        document.getElementById('currentAdmin').textContent = currentAdmin;
+        document.getElementById('adminWelcome').textContent = currentAdmin;
+
+        // Firebase配置
+        const firebaseConfig = {
+            apiKey: "您的API密钥",
+            authDomain: "您的项目ID.firebaseapp.com", 
+            projectId: "您的项目ID",
+            storageBucket: "您的项目ID.appspot.com",
+            messagingSenderId: "您的发送者ID",
+            appId: "您的应用ID"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // 退出登录
+        function adminLogout() {
+            sessionStorage.clear();
+            window.location.href = 'admin-login.html';
+        }
+
+        // 侧边栏切换
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                if (this.dataset.tab) {
+                    // 更新活跃状态
+                    document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                    document.querySelectorAll('.content-card').forEach(card => card.classList.remove('active'));
+                    
+                    this.classList.add('active');
+                    document.getElementById(this.dataset.tab).classList.add('active');
+                    document.getElementById('pageTitle').textContent = this.textContent.trim();
+                    
+                    // 加载对应数据
+                    loadTabData(this.dataset.tab);
+                }
+            });
+        });
+
+        // 加载标签页数据
+        function loadTabData(tab) {
+            switch(tab) {
+                case 'products': loadServices(); break;
+                case 'users': loadUsers(); break;
+                case 'crypto': loadTransferUsers(); break;
+            }
+        }
+
+        // 加载服务列表
+        function loadServices() {
+            db.collection('services').get().then(snapshot => {
+                const tbody = document.getElementById('servicesTable');
+                tbody.innerHTML = '';
+                
+                snapshot.forEach(doc => {
+                    const service = doc.data();
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${service.name}</td>
+                            <td>${service.type === 'country' ? '国家' : '应用'}</td>
+                            <td>¥${service.price}</td>
+                            <td>${service.active ? '启用' : '禁用'}</td>
+                            <td>
+                                <button class="btn btn-primary" onclick="editService('${doc.id}')">编辑</button>
+                                <button class="btn btn-danger" onclick="deleteService('${doc.id}')">删除</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            });
+        }
+
+        // 加载用户列表
+        function loadUsers() {
+            db.collection('users').get().then(snapshot => {
+                const tbody = document.getElementById('usersTable');
+                tbody.innerHTML = '';
+                
+                snapshot.forEach(doc => {
+                    const user = doc.data();
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${user.email}</td>
+                            <td>¥${user.balance || 0}</td>
+                            <td>${user.createdAt?.toDate?.().toLocaleDateString() || '未知'}</td>
+                            <td>
+                                <button class="btn btn-primary" onclick="editUser('${doc.id}')">编辑</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            });
+        }
+
+        // 加载转账用户列表
+        function loadTransferUsers() {
+            db.collection('users').get().then(snapshot => {
+                const select = document.getElementById('transferUser');
+                select.innerHTML = '<option value="">选择用户...</option>';
+                
+                snapshot.forEach(doc => {
+                    const user = doc.data();
+                    select.innerHTML += `<option value="${doc.id}">${user.email}</option>`;
+                });
+            });
+        }
+
+        // 加密货币转账函数（模板）
+        function processCryptoTransfer() {
+            const userId = document.getElementById('transferUser').value;
+            const amount = document.getElementById('transferAmount').value;
+            const toAddress = document.getElementById('transferToAddress').value;
+            const network = document.getElementById('transferNetwork').value;
+            
+            if (!userId || !amount || !toAddress) {
+                alert('请填写完整信息');
+                return;
+            }
+            
+            // 这里以后会调用智能合约
+            alert(`转账信息:\n用户ID: ${userId}\n金额: ${amount} USDT\n收款地址: ${toAddress}\n网络: ${network}\n\n智能合约功能开发中...`);
+            
+            // 模拟转账记录
+            const history = document.getElementById('transferHistory');
+            history.innerHTML = `
+                <div style="padding: 10px; background: white; margin: 5px 0; border-radius: 3px;">
+                    ${new Date().toLocaleString()} - 转账 ${amount} USDT 到 ${toAddress} (${network})
+                </div>
+            ` + history.innerHTML;
+        }
+
+        // 初始化加载产品数据
+        loadServices();
+    </script>
+</body>
+</html>
